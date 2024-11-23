@@ -1,3 +1,5 @@
+#if FIS_SENSOR == FIS_MLX90640
+
 #include <Wire.h>
 #include "MLX90640.h"
 #include "Configuration.h"
@@ -82,3 +84,6 @@ float MLX90640::getTemperature(int num) {
     return 0;
   }
 }
+
+
+#endif // FIS_SENSOR == FIS_MLX90640

@@ -7,6 +7,9 @@
  *  Adapted by https://github.com/longjos
  *  	Adapted for use with Arduino UNO
  */
+#if FIS_SENSOR == FIS_MLX90621
+
+
 #include "MLX90621.h"
 #include "Configuration.h"
 #include <Wire.h>
@@ -144,7 +147,7 @@ void MLX90621::preCalculateConstants() {
 void MLX90621::calculateTO() {
 	float v_cp_off_comp = (float) cpix - (a_cp + b_cp * (Tambient - 25.0));
 	tak4 = pow((float) Tambient + 273.15, 4.0);
-	minTemp = NULL, maxTemp = NULL;
+	minTemp = 9999, maxTemp = -9999;
 	for (int i = 0; i < 64; i++) {
 		a_ij = ((float) a_common + eepromData[i] * pow(2.0, a_i_scale)) / resolution_comp;
 		b_ij = (float) twos_8(eepromData[0x40 + i]) / (pow(2.0, b_i_scale) * resolution_comp);
@@ -161,10 +164,10 @@ void MLX90621::calculateTO() {
 		float temperature = pow((v_ir_comp / alpha_comp) + tak4, 1.0 / 4.0) - 274.15;
 
 		temperatures[i] = temperature;
-		if (minTemp == NULL || temperature < minTemp) {
+		if (minTemp == 9999 || temperature < minTemp) {
 			minTemp = temperature;
 		}
-		if (maxTemp == NULL || temperature > maxTemp) {
+		if (maxTemp == -9999 || temperature > maxTemp) {
 			maxTemp = temperature;
 		}
 	}
@@ -260,3 +263,6 @@ boolean MLX90621::checkConfig() {
 	bool check = !((readConfig() & 0x0400) >> 10);
 	return check;
 }
+
+
+#endif // FIS_SENSOR == FIS_MLX90621

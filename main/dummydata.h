@@ -1,4 +1,16 @@
+
+#ifdef DUMMYDATA
+
 // RANDOM DUMMY DATA
+#if BOARD == BOARD_NRF52_FEATHER
+  #include <bluefruit.h>
+  // #include <ArduinoBLE.h>
+#elif BOARD == BOARD_ESP32_FEATHER || BOARD_ESP32_LOLIND32
+  #include <BLEDevice.h>
+  #include <BLEServer.h>
+  #include <BLEUtils.h>
+  #include <BLE2902.h>
+#endif
 
 void dummyloop(void) {
 
@@ -11,6 +23,22 @@ void dummyloop(void) {
   unsigned long ctimer = 0;
   unsigned long cdelay = 9000;
   unsigned long btimer = 0;
+#if BOARD == BOARD_NRF52_FEATHER
+  BLEService         mainService;
+  BLECharacteristic  GATTone;
+  BLECharacteristic  GATTtwo;
+  BLECharacteristic  GATTthr;
+#elif BOARD == BOARD_ESP32_FEATHER || BOARD_ESP32_LOLIND32
+  BLEService*        mainService;
+  BLEServer*         mainServer;
+  BLEAdvertising*    mainAdvertising;
+  BLECharacteristic* GATTone;
+  BLECharacteristic* GATTtwo;
+  BLECharacteristic* GATTthr;
+#endif
+  one_t             datapackOne;
+  two_t             datapackTwo;
+  thr_t             datapackThr;
 
   datapackOne.distance = 150;
   datapackTwo.voltage = 4220;
@@ -77,9 +105,18 @@ void dummyloop(void) {
   
     
     if ( Bluefruit.connected() ) {
-      GATTone.notify(&datapackOne, sizeof(datapackOne));
-      GATTtwo.notify(&datapackTwo, sizeof(datapackTwo));
-      GATTthr.notify(&datapackThr, sizeof(datapackThr));
+      #if BOARD == BOARD_NRF52_FEATHER
+        GATTone.notify(&datapackOne, sizeof(datapackOne));
+        GATTtwo.notify(&datapackTwo, sizeof(datapackTwo));
+        GATTthr.notify(&datapackThr, sizeof(datapackThr));
+      #elif BOARD == BOARD_ESP32_FEATHER || BOARD_ESP32_LOLIND32
+        GATTone->setValue((uint8_t*)&datapackOne, sizeof(datapackOne));
+        GATTtwo->setValue((uint8_t*)&datapackTwo, sizeof(datapackTwo));
+        GATTthr->setValue((uint8_t*)&datapackThr, sizeof(datapackThr));
+        GATTone->notify();
+        GATTtwo->notify();
+        GATTthr->notify();
+      #endif 
     }
 
 
@@ -91,3 +128,5 @@ void dummyloop(void) {
     
   }
 }
+
+#endif // DUMMYDATA

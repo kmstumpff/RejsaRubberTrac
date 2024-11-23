@@ -1,19 +1,30 @@
 #ifndef CONFIGURATION_H
 #define CONFIGURATION_H
 
-#define _DEBUG                    // Set debug mode, results in more verbose output on serial port
+// #define _DEBUG                    // Set debug mode, results in more verbose output on serial port
 #include "Constants.h"
 
 //#define DUMMYDATA       // Uncomment to enable transmission of fake random data for testing with no sensors needed
 
 
 // -- Basic device configuration, see Constants.h
+#if defined(ARDUINO_NRF52_ADAFRUIT)
+#define BOARD              BOARD_NRF52_FEATHER
+// #elif defined(ARDUINO_ESP32_ADAFRUIT)
+// #define BOARD              BOARD_ESP32_FEATHER
+// #elif defined(LOLIN_D32)
+// #define BOARD              BOARD_ESP32_LOLIND32
+#else
 #define BOARD              BOARD_ESP32_FEATHER
+#endif
+
+// -- Display related settings
+
 #define DISP_DEVICE        DISP_NONE
 
 // -- Distance Sensor related settings
 
-#define DIST_SENSOR        DIST_NONE
+#define DIST_SENSOR        DIST_NONE //DIST_VL53L0X
 #define DIST_SENSOR2       DIST_NONE // Device to use for second sensor on second I2C hardware bus (ESP32 only), see Constants.h
 
 #define DISTANCEOFFSET 0         // Write distance to tire in mm here to get logged distance data value centered around zero
@@ -21,7 +32,7 @@
 
 // -- Far Infrared Sensor related settings
 
-#define FIS_SENSOR         FIS_MLX90640    // Device to use, see Constants.h    
+#define FIS_SENSOR         FIS_AMG8833    // Device to use, see Constants.h    
 
 #if BOARD == BOARD_ESP32_LOLIND32
   #define FIS_SENSOR2_PRESENT 0            // Set to 1 if second sensor on second I2C hardware bus is present (ESP32 only)

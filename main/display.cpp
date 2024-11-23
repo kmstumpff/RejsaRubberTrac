@@ -1,3 +1,6 @@
+
+#if DISP_DEVICE != DISP_NONE
+
 #include "display.h"
 #include "Configuration.h"
 #include "algo.h"
@@ -47,3 +50,5 @@ void Display::drawBarChart(int16_t tempMeasurement[], int x, int y, int barWidth
   displayDevice.printf("%.0fC" ,minTemp/10);
   
 }
+
+#endif

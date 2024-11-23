@@ -3,6 +3,8 @@
 // or paraphrased from the API source code, API user manual (UM2039), and the
 // VL53L0X datasheet.
 
+#if DIST_SENSOR == DIST_VL53L0X || DIST_SENSOR2 == DIST_VL53L0X
+
 #include "VL53L0X-2xI2C.h"
 #include <Wire.h>
 
@@ -1039,3 +1041,7 @@ bool VL53L0X::performSingleRefCalibration(uint8_t vhv_init_byte)
 
   return true;
 }
+
+
+
+#endif // DIST_SENSOR == DIST_VL53L0X || DIST_SENSOR2 == DIST_VL53L0X

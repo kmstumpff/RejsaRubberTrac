@@ -14,7 +14,7 @@
    limitations under the License.
 
 */
-
+#if FIS_SENSOR == FIS_MLX90640
 
 #include <Wire.h>
 #include <Arduino.h>
@@ -106,3 +106,5 @@ int MLX90640_I2CWrite(uint8_t _deviceAddress, unsigned int writeAddress, uint16_
 
   return (0); //Success
 }
+
+#endif // FIS_SENSOR == FIS_MLX90640

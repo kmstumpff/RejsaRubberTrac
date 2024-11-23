@@ -35,7 +35,10 @@ void TempSensor::measure() {
 #if FIS_SENSOR == FIS_MLX90621 || FIS_SENSOR == FIS_MLX90640
   FISDevice.measure(true);
 #elif FIS_SENSOR == FIS_AMG8833
-  FISDevice.updateThermistorTemperature();
+  int code = FISDevice.updateThermistorTemperature();
+  if (code != (int)Melopero_AMG8833_ERROR_CODE::NO_ERROR) {
+    debug(FISDevice.getErrorDescription(code).c_str());
+  }
   FISDevice.updatePixelMatrix();
 #endif
   

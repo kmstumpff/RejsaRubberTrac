@@ -4,8 +4,10 @@
 #include "Configuration.h"
 #include "temp_sensor.h"
 #include "dist_sensor.h"
+#if DISP_DEVICE != DISP_NONE
 #include "display.h"
-#include "ble.h"
+#endif
+#include "rrt_ble.h"
 #include "algo.h"
   
 TempSensor tempSensor;
@@ -26,7 +28,9 @@ char deviceNameSuffix[] = "  ";
 #endif
 
 BLDevice bleDevice;
+#if DISP_DEVICE != DISP_NONE
 Display display;
+#endif
 Tasker tasker;
 
 int vBattery = 0;          // Current battery voltage in mV
@@ -214,8 +218,9 @@ void loop() {
 }
 
 void updateDisplay(void) {
+#if DISP_DEVICE != DISP_NONE
   display.refreshDisplay(tempSensor.measurement, tempSensor.outerTireEdgePositionSmoothed, tempSensor.innerTireEdgePositionSmoothed, tempSensor.validAutozoomFrame, updateRate, distSensor.distance, lipoPercentage, bleDevice.isConnected());
-
+#endif
 // 2do: integrate tempSensor2 & distSensor2 for display
 }
 
